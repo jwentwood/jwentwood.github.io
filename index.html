@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Links — Your Name</title>
+<link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Google+Sans+Display:wght@400;500;700&family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,1,0&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --md-sys-color-primary: #9C4A3A;
+    --md-sys-color-on-primary: #FFFFFF;
+    --md-sys-color-primary-container: #FFDAD4;
+    --md-sys-color-on-primary-container: #3F0300;
+    --md-sys-color-secondary: #8C5E55;
+    --md-sys-color-secondary-container: #FFDAD4;
+    --md-sys-color-on-secondary-container: #3B0907;
+    --md-sys-color-tertiary: #A07040;
+    --md-sys-color-tertiary-container: #FFDDB8;
+    --md-sys-color-surface: #FFF8F6;
+    --md-sys-color-surface-variant: #F5DDDA;
+    --md-sys-color-on-surface: #231917;
+    --md-sys-color-on-surface-variant: #534340;
+    --md-sys-color-outline: #857370;
+    --md-sys-color-outline-variant: #D8C2BE;
+    --md-sys-color-background: #FFF8F6;
+    --md-sys-color-surface-container: #FAEAE7;
+    --md-sys-color-surface-container-high: #F5E4E1;
+    --md-sys-color-surface-container-highest: #EFDEDA;
+    --md-elevation-1: 0px 1px 2px rgba(0,0,0,0.2), 0px 1px 3px 1px rgba(0,0,0,0.1);
+    --md-elevation-2: 0px 1px 2px rgba(0,0,0,0.2), 0px 2px 6px 2px rgba(0,0,0,0.1);
+    --md-elevation-3: 0px 4px 8px 3px rgba(0,0,0,0.1), 0px 1px 3px rgba(0,0,0,0.2);
+    --md-shape-corner-full: 50px;
+    --md-shape-corner-extra-large: 28px;
+    --md-shape-corner-large: 16px;
+    --md-shape-corner-medium: 12px;
+    --md-shape-corner-small: 8px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    height: 100%;
+    overflow: hidden;
+  }
+
+  body {
+    font-family: 'Google Sans', sans-serif;
+    background: var(--md-sys-color-background);
+    color: var(--md-sys-color-on-surface);
+    height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: clamp(8px, 2vh, 20px) clamp(12px, 3vw, 24px);
+  }
+
+  /* Subtle tonal background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 20% 10%, rgba(255,180,160,0.18) 0%, transparent 70%),
+      radial-gradient(ellipse 60% 50% at 80% 80%, rgba(255,210,180,0.14) 0%, transparent 65%),
+      radial-gradient(ellipse 50% 40% at 50% 50%, rgba(220,140,110,0.08) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .page {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 520px;
+    display: flex;
+    flex-direction: column;
+    gap: clamp(6px, 1.2vh, 16px);
+    align-items: center;
+  }
+
+  /* Profile card */
+  .profile-card {
+    background: var(--md-sys-color-surface-container);
+    border-radius: var(--md-shape-corner-extra-large);
+    padding: clamp(10px, 2vh, 24px) clamp(16px, 3vw, 28px);
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: clamp(10px, 2vw, 20px);
+    box-shadow: var(--md-elevation-2);
+    animation: slide-up 0.5s cubic-bezier(0.05, 0.7, 0.1, 1) both;
+  }
+
+  .avatar-wrap {
+    flex-shrink: 0;
+    width: clamp(72px, 13vh, 110px);
+    height: clamp(72px, 13vh, 110px);
+  }
+
+  .avatar {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+    border: none;
+  }
+
+  .profile-text {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .profile-name {
+    font-family: 'Google Sans Display', sans-serif;
+    font-size: clamp(22px, 4vh, 32px);
+    font-weight: 500;
+    color: var(--md-sys-color-on-surface);
+    letter-spacing: -0.3px;
+  }
+
+  .profile-blurb {
+    font-size: clamp(14px, 2vh, 17px);
+    font-weight: 400;
+    line-height: 1.5;
+    color: var(--md-sys-color-on-surface-variant);
+  }
+
+  /* Section card */
+  .section-card {
+    background: var(--md-sys-color-surface-container);
+    border-radius: var(--md-shape-corner-extra-large);
+    padding: clamp(10px, 1.8vh, 20px) clamp(14px, 2.5vw, 24px) clamp(12px, 2vh, 22px);
+    width: 100%;
+    box-shadow: var(--md-elevation-2);
+    animation: slide-up 0.5s cubic-bezier(0.05, 0.7, 0.1, 1) both;
+  }
+
+  .section-card:nth-child(2) { animation-delay: 0.08s; }
+  .section-card:nth-child(3) { animation-delay: 0.14s; }
+  .section-card:nth-child(4) { animation-delay: 0.20s; }
+
+  .section-label {
+    font-size: clamp(12px, 1.6vh, 15px);
+    font-weight: 500;
+    letter-spacing: 1.6px;
+    text-transform: uppercase;
+    color: var(--md-sys-color-primary);
+    margin-bottom: clamp(8px, 1.4vh, 16px);
+    padding: 0 2px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1.5px;
+    background: var(--md-sys-color-outline-variant);
+    border-radius: 1px;
+  }
+
+  /* Icon grid */
+  .icon-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(72px, 1fr));
+    gap: clamp(12px, 3vw, 20px);
+    width: 100%;
+  }
+
+  .icon-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: clamp(5px, 0.8vh, 8px);
+    text-decoration: none;
+    cursor: pointer;
+    border: none;
+    background: none;
+    padding: 0;
+    width: 100%;
+    position: relative;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .icon-surface {
+    width: 100%;
+    aspect-ratio: 1;
+    border-radius: clamp(14px, 2vw, 20px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    transition: box-shadow 0.2s cubic-bezier(0.05, 0.7, 0.1, 1),
+                transform 0.2s cubic-bezier(0.05, 0.7, 0.1, 1);
+    box-shadow: var(--md-elevation-2);
+  }
+
+  .icon-surface::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: currentColor;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  .icon-btn:hover .icon-surface {
+    box-shadow: var(--md-elevation-3);
+    transform: translateY(-2px);
+  }
+
+  .icon-btn:hover .icon-surface::after { opacity: 0.08; }
+  .icon-btn:active .icon-surface { transform: scale(0.94) translateY(0); box-shadow: var(--md-elevation-1); }
+  .icon-btn:active .icon-surface::after { opacity: 0.12; }
+
+  .icon-surface img, .icon-surface svg {
+    width: 70%;
+    height: 70%;
+    object-fit: contain;
+    position: relative;
+    z-index: 1;
+  }
+
+  .icon-label {
+    font-size: clamp(12px, 1.8vh, 15px);
+    font-weight: 400;
+    color: var(--md-sys-color-on-surface);
+    text-align: center;
+    line-height: 1.2;
+  }
+
+  /* Color variants for icon surfaces */
+  .surf-primary-soft {
+    background: var(--md-sys-color-primary-container);
+    color: var(--md-sys-color-primary);
+  }
+
+  /* Donate section accent */
+  .section-donate .section-label { color: var(--md-sys-color-tertiary); }
+  .section-donate .section-label::after { background: var(--md-sys-color-outline-variant); }
+
+  /* Animations */
+  @keyframes slide-up {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- Profile -->
+  <div class="profile-card">
+    <div class="avatar-wrap">
+      <img class="avatar" src="profile.png" alt="jwentwood">
+    </div>
+    <div class="profile-text">
+      <div class="profile-name">jwentwood</div>
+      <div class="profile-blurb">Digital artist specialising in NSFW. I love breathplay!</div>
+    </div>
+  </div>
+
+  <!-- Official Platforms -->
+  <div class="section-card">
+    <div class="section-label">Official</div>
+    <div class="icon-grid">
+
+      <a class="icon-btn" href="https://www.pixiv.net/en/users/114400161" target="_blank" rel="noopener">
+        <div class="icon-surface" style="background:#fff; padding:8px;">
+          <img src="https://play-lh.googleusercontent.com/UADIlh0kSQkh59fl-s3RgLFILa_EY5RqA4sMOtKD-fX0z0fDVUR7_a7ysylufmhH-K-XfhSVVdpspD8K0jtu=w240-h480-rw" alt="Pixiv" style="width:100%;height:100%;object-fit:contain;border-radius:10px;">
+        </div>
+        <span class="icon-label">Pixiv</span>
+      </a>
+
+      <a class="icon-btn" href="https://www.deviantart.com/jwentwood" target="_blank" rel="noopener">
+        <div class="icon-surface" style="background:#fff; padding:10px;">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/DeviantArt_Logo2.svg/500px-DeviantArt_Logo2.svg.png" alt="DeviantArt" style="width:100%;height:100%;object-fit:contain;">
+        </div>
+        <span class="icon-label">DeviantArt</span>
+      </a>
+
+      <a class="icon-btn" href="https://www.reddit.com/user/jwentwood" target="_blank" rel="noopener">
+        <div class="icon-surface" style="background:#fff; padding:10px;">
+          <img src="https://redditinc.com/hs-fs/hubfs/Reddit%20Inc/Content/Brand%20Page/Reddit_Logo.png?" alt="Reddit" style="width:100%;height:100%;object-fit:contain;">
+        </div>
+        <span class="icon-label">Reddit</span>
+      </a>
+
+      <a class="icon-btn" href="https://discord.com/users/1015864196237365301" target="_blank" rel="noopener">
+        <div class="icon-surface" style="background:#5865F2; padding:10px;">
+          <img src="https://static.wikia.nocookie.net/discord/images/4/47/Placeholder.png" alt="Discord" style="width:100%;height:100%;object-fit:contain;">
+        </div>
+        <span class="icon-label">Discord</span>
+      </a>
+
+    </div>
+  </div>
+
+  <!-- Ad-free / No-login Frontends -->
+  <div class="section-card">
+    <div class="section-label">Ad-free / No Login</div>
+    <div class="icon-grid">
+
+      <a class="icon-btn" href="https://pixiv.perennialte.ch/users/114400161" target="_blank" rel="noopener">
+        <div class="icon-surface" style="background:#fff; padding:10px;">
+          <img src="https://gitlab.com/uploads/-/system/project/avatar/67092992/b9a8c82b56a5f8f466f3731164f71ed961ca971df89c6a1ceac618e3b5062050.png" alt="PixivFE" style="width:100%;height:100%;object-fit:contain;border-radius:8px;">
+        </div>
+        <span class="icon-label">PixivFE</span>
+      </a>
+
+      <a class="icon-btn" href="https://redlib.catsarch.com/user/jwentwood" target="_blank" rel="noopener">
+        <div class="icon-surface" style="background:#fff; padding:10px;">
+          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSfBxVrmtIsczCO7J1tRCRZPuhXtVMH1AVs9A&s" alt="Redlib" style="width:100%;height:100%;object-fit:contain;">
+        </div>
+        <span class="icon-label">Redlib</span>
+      </a>
+
+    </div>
+  </div>
+
+  <!-- Donate -->
+  <div class="section-card section-donate">
+    <div class="section-label">Support My Work</div>
+    <div class="icon-grid">
+
+      <a class="icon-btn" href="https://www.paypal.com/ncp/payment/PAFZTEP2H2VP6" target="_blank" rel="noopener">
+        <div class="icon-surface" style="background:#fff; padding:12px;">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/PayPal_Logo_Icon_2014.svg/960px-PayPal_Logo_Icon_2014.svg.png" alt="PayPal" style="width:100%;height:100%;object-fit:contain;">
+        </div>
+        <span class="icon-label">PayPal</span>
+      </a>
+
+      <a class="icon-btn" href="https://www.buymeacoffee.com/jwentwood" target="_blank" rel="noopener">
+        <div class="icon-surface" style="background:#fff; padding:10px;">
+          <img src="https://cdn.buymeacoffee.com/assets/logos/icon-black.png" alt="Buy Me a Coffee" style="width:100%;height:100%;object-fit:contain;border-radius:8px;">
+        </div>
+        <span class="icon-label">Buy Me a Coffee</span>
+      </a>
+
+
+
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>
