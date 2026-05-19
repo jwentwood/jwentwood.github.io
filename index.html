@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Links — Jwentwood</title>
 <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Google+Sans+Display:wght@400;500;700&family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,1,0&display=swap" rel="stylesheet">
+<script src="https://www.paypal.com/sdk/js?client-id=BAAy30PqBWBN-qY0SJKGlzDjjjx-Rp3vZQBYH_LyLo6Acg_Qyckv1VrRxp6TPWa0Hl6MTv9ZJn8D8QNKYU&components=hosted-buttons&disable-funding=venmo&currency=USD"></script>
 <style>
   :root {
     --md-sys-color-primary: #9C4A3A;
@@ -38,21 +39,22 @@
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
 
-  html, body {
+  html {
     height: 100%;
-    overflow: hidden;
   }
 
   body {
     font-family: 'Google Sans', sans-serif;
     background: var(--md-sys-color-background);
     color: var(--md-sys-color-on-surface);
-    height: 100dvh;
+    min-height: 100dvh;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: safe center;
     padding: clamp(8px, 2vh, 20px) clamp(12px, 3vw, 24px);
+    overflow-y: auto;
+    overflow-x: hidden;
   }
 
   /* Subtle tonal background */
@@ -77,6 +79,8 @@
     flex-direction: column;
     gap: clamp(6px, 1.2vh, 16px);
     align-items: center;
+    padding-top: clamp(8px, 2vh, 20px);
+    padding-bottom: clamp(8px, 2vh, 20px);
   }
 
   /* Profile card */
@@ -246,6 +250,60 @@
   .section-donate .section-label { color: var(--md-sys-color-tertiary); }
   .section-donate .section-label::after { background: var(--md-sys-color-outline-variant); }
 
+  /* PayPal button */
+  .paypal-btn {
+    margin-top: clamp(10px, 1.6vh, 18px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    padding: clamp(12px, 1.8vh, 16px) clamp(16px, 2vw, 24px);
+    background: var(--md-sys-color-tertiary-container);
+    color: var(--md-sys-color-on-surface);
+    border: none;
+    border-radius: var(--md-shape-corner-large);
+    box-shadow: var(--md-elevation-2);
+    text-decoration: none;
+    font-family: 'Google Sans', sans-serif;
+    font-size: clamp(14px, 2vh, 16px);
+    font-weight: 500;
+    letter-spacing: 0.1px;
+    cursor: pointer;
+    transition: box-shadow 0.2s cubic-bezier(0.05, 0.7, 0.1, 1),
+                transform 0.2s cubic-bezier(0.05, 0.7, 0.1, 1);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .paypal-btn::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: currentColor;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  .paypal-btn:hover {
+    box-shadow: var(--md-elevation-3);
+    transform: translateY(-2px);
+  }
+
+  .paypal-btn:hover::after { opacity: 0.06; }
+  .paypal-btn:active { transform: scale(0.98); box-shadow: var(--md-elevation-1); }
+  .paypal-btn:active::after { opacity: 0.1; }
+
+  .paypal-btn img {
+    height: 22px;
+    width: auto;
+    object-fit: contain;
+  }
+
+  .paypal-btn + .paypal-btn {
+    margin-top: clamp(8px, 1.2vh, 12px);
+  }
+
   /* Animations */
   @keyframes slide-up {
     from { opacity: 0; transform: translateY(16px); }
@@ -328,25 +386,18 @@
   <!-- Donate -->
   <div class="section-card section-donate">
     <div class="section-label">Support My Work</div>
-    <div class="icon-grid">
 
-      <a class="icon-btn" href="https://www.paypal.com/ncp/payment/PAFZTEP2H2VP6" target="_blank" rel="noopener">
-        <div class="icon-surface" style="background:#fff; padding:12px;">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/PayPal_Logo_Icon_2014.svg/960px-PayPal_Logo_Icon_2014.svg.png" alt="PayPal" style="width:100%;height:100%;object-fit:contain;">
-        </div>
-        <span class="icon-label">PayPal</span>
-      </a>
+    <a class="paypal-btn" href="https://www.buymeacoffee.com/jwentwood" target="_blank" rel="noopener">
+      <img src="https://cdn.buymeacoffee.com/assets/logos/icon-black.png" alt="Buy Me a Coffee" style="border-radius:4px;">
+      Buy Me a Coffee
+    </a>
 
-      <a class="icon-btn" href="https://www.buymeacoffee.com/jwentwood" target="_blank" rel="noopener">
-        <div class="icon-surface" style="background:#fff; padding:10px;">
-          <img src="https://cdn.buymeacoffee.com/assets/logos/icon-black.png" alt="Buy Me a Coffee" style="width:100%;height:100%;object-fit:contain;border-radius:8px;">
-        </div>
-        <span class="icon-label">Buy Me a Coffee</span>
-      </a>
-
-
-
-    </div>
+    <form action="https://www.paypal.com/ncp/payment/PAFZTEP2H2VP6" method="post" target="_blank" style="width:100%;">
+      <button type="submit" class="paypal-btn">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/PayPal_Logo_Icon_2014.svg/960px-PayPal_Logo_Icon_2014.svg.png" alt="PayPal">
+        Donate via PayPal
+      </button>
+    </form>
   </div>
 
 </div>
