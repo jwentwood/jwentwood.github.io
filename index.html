@@ -40,9 +40,7 @@
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
 
-  html {
-    height: 100%;
-  }
+  html { height: 100%; }
 
   body {
     font-family: 'Google Sans', sans-serif;
@@ -58,7 +56,6 @@
     overflow-x: hidden;
   }
 
-  /* Subtle tonal background */
   body::before {
     content: '';
     position: fixed;
@@ -88,20 +85,28 @@
   .profile-card {
     background: var(--md-sys-color-surface-container);
     border-radius: var(--md-shape-corner-extra-large);
-    padding: clamp(10px, 2vh, 24px) clamp(16px, 3vw, 28px);
+    padding: clamp(12px, 2vh, 24px) clamp(16px, 3vw, 28px);
     width: 100%;
     display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: clamp(10px, 2vw, 20px);
+    flex-direction: column;
+    gap: clamp(10px, 1.6vh, 18px);
     box-shadow: var(--md-elevation-2);
     animation: slide-up 0.5s cubic-bezier(0.05, 0.7, 0.1, 1) both;
   }
 
+  /* Top row: avatar + name side by side, centered */
+  .profile-top {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(14px, 3vw, 24px);
+  }
+
   .avatar-wrap {
     flex-shrink: 0;
-    width: clamp(72px, 13vh, 110px);
-    height: clamp(72px, 13vh, 110px);
+    width: clamp(72px, 13vh, 108px);
+    height: clamp(72px, 13vh, 108px);
   }
 
   .avatar {
@@ -110,27 +115,23 @@
     border-radius: 50%;
     object-fit: cover;
     display: block;
-    border: none;
-  }
-
-  .profile-text {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
   }
 
   .profile-name {
     font-family: 'Google Sans Display', sans-serif;
-    font-size: clamp(22px, 4vh, 32px);
-    font-weight: 500;
+    font-size: clamp(30px, 7vw, 48px);
+    font-weight: 700;
     color: var(--md-sys-color-on-surface);
     letter-spacing: -0.3px;
+    line-height: 1.1;
+    word-break: break-word;
   }
 
+  /* Blurb below */
   .profile-blurb {
-    font-size: clamp(14px, 2vh, 17px);
+    font-size: clamp(13px, 1.9vh, 16px);
     font-weight: 400;
-    line-height: 1.5;
+    line-height: 1.55;
     color: var(--md-sys-color-on-surface-variant);
   }
 
@@ -216,11 +217,7 @@
     transition: opacity 0.2s;
   }
 
-  .icon-btn:hover .icon-surface {
-    box-shadow: var(--md-elevation-3);
-    transform: translateY(-2px);
-  }
-
+  .icon-btn:hover .icon-surface { box-shadow: var(--md-elevation-3); transform: translateY(-2px); }
   .icon-btn:hover .icon-surface::after { opacity: 0.08; }
   .icon-btn:active .icon-surface { transform: scale(0.94) translateY(0); box-shadow: var(--md-elevation-1); }
   .icon-btn:active .icon-surface::after { opacity: 0.12; }
@@ -241,17 +238,15 @@
     line-height: 1.2;
   }
 
-  /* Color variants for icon surfaces */
   .surf-primary-soft {
     background: var(--md-sys-color-primary-container);
     color: var(--md-sys-color-primary);
   }
 
-  /* Donate section accent */
+  /* Donate section */
   .section-donate .section-label { color: var(--md-sys-color-tertiary); }
   .section-donate .section-label::after { background: var(--md-sys-color-outline-variant); }
 
-  /* PayPal button */
   .paypal-btn {
     margin-top: clamp(10px, 1.6vh, 18px);
     display: flex;
@@ -286,11 +281,7 @@
     transition: opacity 0.2s;
   }
 
-  .paypal-btn:hover {
-    box-shadow: var(--md-elevation-3);
-    transform: translateY(-2px);
-  }
-
+  .paypal-btn:hover { box-shadow: var(--md-elevation-3); transform: translateY(-2px); }
   .paypal-btn:hover::after { opacity: 0.06; }
   .paypal-btn:active { transform: scale(0.98); box-shadow: var(--md-elevation-1); }
   .paypal-btn:active::after { opacity: 0.1; }
@@ -305,7 +296,6 @@
     margin-top: clamp(8px, 1.2vh, 12px);
   }
 
-  /* Animations */
   @keyframes slide-up {
     from { opacity: 0; transform: translateY(16px); }
     to   { opacity: 1; transform: translateY(0); }
@@ -317,13 +307,20 @@
 
   <!-- Profile -->
   <div class="profile-card">
-    <div class="avatar-wrap">
-      <img class="avatar" src="profile.png" alt="jwentwood">
-    </div>
-    <div class="profile-text">
+
+    <!-- Row 1: avatar + name side by side, centered -->
+    <div class="profile-top">
+      <div class="avatar-wrap">
+        <img class="avatar" src="profile.png" alt="jwentwood">
+      </div>
       <div class="profile-name">jwentwood</div>
-      <div class="profile-blurb">Digital artist specialising in NSFW. I love breathplay!</div>
     </div>
+
+    <!-- Row 2: blurb -->
+    <div class="profile-blurb">
+      Digital artist specialising in NSFW. I love breathplay!
+    </div>
+
   </div>
 
   <!-- Official Platforms -->
@@ -393,8 +390,8 @@
       Buy Me a Coffee
     </a>
 
-    <form action="https://www.paypal.com/ncp/payment/PAFZTEP2H2VP6" method="post" target="_blank" style="width:100%;">
-      <button type="submit" class="paypal-btn">
+    <form action="https://www.paypal.com/ncp/payment/PAFZTEP2H2VP6" method="post" target="_blank" style="width:100%; margin-top: clamp(8px, 1.2vh, 12px);">
+      <button type="submit" class="paypal-btn" style="margin-top:0;">
         <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/PayPal_Logo_Icon_2014.svg/960px-PayPal_Logo_Icon_2014.svg.png" alt="PayPal">
         Donate via PayPal
       </button>
@@ -402,6 +399,5 @@
   </div>
 
 </div>
-
 </body>
 </html>
