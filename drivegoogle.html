@@ -1,0 +1,48 @@
+<!doctype html>
+<title>Drive Redirect</title>
+<script>
+  const payload = {
+    salt: "50bLv1dOCmPe1n0PSlINbg==",
+    iv: "8t688UWeW2vmF2EQ",
+    data: "6E6Ss83fL/UULoJiPwsxi1lhPkB5RsViKYtCEvpyccLe5L4+5hRdjv9DAZ2m2djYZ1QcU5FsGuk7+SSY4zuGpkEdML6lgkHX2nnZP6fqfvrSretOkiV4/g==",
+    iterations: 250000
+  };
+
+  function b64ToBytes(b64) {
+    return Uint8Array.from(atob(b64), c => c.charCodeAt(0));
+  }
+
+  async function tryUnlock(password) {
+    const enc = new TextEncoder();
+    const keyMaterial = await crypto.subtle.importKey(
+      "raw", enc.encode(password), "PBKDF2", false, ["deriveKey"]
+    );
+    const key = await crypto.subtle.deriveKey(
+      { name: "PBKDF2", salt: b64ToBytes(payload.salt), iterations: payload.iterations, hash: "SHA-256" },
+      keyMaterial,
+      { name: "AES-GCM", length: 256 },
+      false,
+      ["decrypt"]
+    );
+    const plaintext = await crypto.subtle.decrypt(
+      { name: "AES-GCM", iv: b64ToBytes(payload.iv) },
+      key,
+      b64ToBytes(payload.data)
+    );
+    return new TextDecoder().decode(plaintext);
+  }
+
+  (async function () {
+    for (;;) {
+      const password = prompt("Password:");
+      if (password === null) return;
+      try {
+        const url = await tryUnlock(password);
+        location.replace(url);
+        return;
+      } catch (_) {
+        alert("Incorrect password.");
+      }
+    }
+  })();
+</script>
