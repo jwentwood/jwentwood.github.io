@@ -1,0 +1,57 @@
+name: Convert PNG to WebP
+
+# Whenever a push adds or changes a PNG, convert every PNG in the repo to
+# lossless WebP, point any HTML/CSS/JS references at the new file, delete
+# the PNG and commit the result back to the same branch. Can also be run
+# by hand from the Actions tab to sweep PNGs already in the repo.
+on:
+  push:
+    paths:
+      - '**.png'
+      - '**.PNG'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: png-to-webp-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  convert:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install cwebp
+        run: sudo apt-get update && sudo apt-get install -y webp
+
+      - name: Convert PNGs
+        run: |
+          set -euo pipefail
+          git ls-files -z | grep -zi '\.png$' | while IFS= read -r -d '' png; do
+            webp="${png%.*}.webp"
+            echo "Converting $png -> $webp"
+            cwebp -quiet -lossless -z 9 -exact -metadata icc "$png" -o "$webp"
+            git rm -q "$png"
+            git add "$webp"
+
+            # Rewrite references to the old path (repo-relative) in text files.
+            git ls-files -z -- '*.html' '*.htm' '*.css' '*.js' '*.md' '*.json' '*.xml' '*.webmanifest' \
+              | xargs -0 -r grep -lZF -- "$png" \
+              | xargs -0 -r sed -i "s|$(printf '%s' "$png" | sed 's/[][\.*^$|]/\\&/g')|$webp|g"
+          done
+          git add -A -- '*.html' '*.htm' '*.css' '*.js' '*.md' '*.json' '*.xml' '*.webmanifest'
+
+      - name: Commit and push
+        run: |
+          if git diff --cached --quiet; then
+            echo "Nothing to convert."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Convert PNG images to lossless WebP"
+          git pull --rebase origin "${GITHUB_REF_NAME}"
+          git push origin "HEAD:${GITHUB_REF_NAME}"
