@@ -51,8 +51,8 @@ jobs:
             git add "$webp"
 
             # Rewrite references to the old path (repo-relative) in text files.
-            git ls-files -z -- '*.html' '*.htm' '*.css' '*.js' '*.md' '*.json' '*.xml' '*.webmanifest' \
-              | xargs -0 -r grep -lZF -- "$png" \
+            # git grep exits 1 when nothing references the PNG; that is fine.
+            { git grep -lzF -- "$png" -- '*.html' '*.htm' '*.css' '*.js' '*.md' '*.json' '*.xml' '*.webmanifest' || true; } \
               | xargs -0 -r sed -i "s|$(printf '%s' "$png" | sed 's/[][\.*^$|]/\\&/g')|$webp|g"
           done
           git add -u   # stage the rewritten references
