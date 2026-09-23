@@ -22,7 +22,7 @@ jobs:
   convert:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Install cwebp
         run: sudo apt-get update && sudo apt-get install -y webp
@@ -30,7 +30,7 @@ jobs:
       - name: Convert PNGs
         run: |
           set -euo pipefail
-          git ls-files -z | grep -zi '\.png$' | while IFS= read -r -d '' png; do
+          git ls-files -z | { grep -zi '\.png$' || true; } | while IFS= read -r -d '' png; do
             webp="${png%.*}.webp"
             echo "Converting $png -> $webp"
             cwebp -quiet -lossless -z 9 -exact -metadata icc "$png" -o "$webp"
@@ -42,7 +42,7 @@ jobs:
               | xargs -0 -r grep -lZF -- "$png" \
               | xargs -0 -r sed -i "s|$(printf '%s' "$png" | sed 's/[][\.*^$|]/\\&/g')|$webp|g"
           done
-          git add -A -- '*.html' '*.htm' '*.css' '*.js' '*.md' '*.json' '*.xml' '*.webmanifest'
+          git add -u   # stage the rewritten references
 
       - name: Commit and push
         run: |
