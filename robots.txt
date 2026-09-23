@@ -1,8 +1,0 @@
-# The 18+ gate is client-side JavaScript; a crawler never runs it, so the
-# explicit files are excluded here explicitly.
-User-agent: *
-Disallow: /jwentwood.webp
-Disallow: /commissions.webp
-Disallow: /partner.webp
-
-Sitemap: https://jwentwood.github.io/sitemap.xml
