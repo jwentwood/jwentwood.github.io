@@ -1,21 +1,27 @@
-name: Convert PNG to WebP
+name: Process images
 
-# Whenever a push adds or changes a PNG, convert every PNG in the repo to
-# lossless WebP, point any HTML/CSS/JS references at the new file, delete
-# the PNG and commit the result back to the same branch. Can also be run
-# by hand from the Actions tab to sweep PNGs already in the repo.
+# 1. Convert every PNG in the repo to lossless WebP, point any HTML/CSS/JS
+#    references at the new file and delete the PNG.
+# 2. Rebuild the resized copies in images/sizes/ for any original in
+#    images/ that is new or changed (see .github/scripts/make_sizes.py).
+# The result is committed back to the same branch. Both steps live in one
+# workflow because a commit pushed by a workflow does not start another,
+# so a separate resize workflow would never see a freshly converted PNG.
+# Can also be run by hand from the Actions tab.
 on:
   push:
     paths:
       - '**.png'
       - '**.PNG'
+      - 'images/**'
+      - '.github/scripts/make_sizes.py'
   workflow_dispatch:
 
 permissions:
   contents: write
 
 concurrency:
-  group: png-to-webp-${{ github.ref }}
+  group: images-${{ github.ref }}
   cancel-in-progress: false
 
 jobs:
@@ -26,6 +32,13 @@ jobs:
 
       - name: Install cwebp
         run: sudo apt-get update && sudo apt-get install -y webp
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+
+      - name: Install Pillow
+        run: pip install pillow==12.3.0
 
       - name: Convert PNGs
         run: |
@@ -44,14 +57,19 @@ jobs:
           done
           git add -u   # stage the rewritten references
 
+      - name: Build resized copies
+        run: |
+          python .github/scripts/make_sizes.py
+          git add -A images/sizes
+
       - name: Commit and push
         run: |
           if git diff --cached --quiet; then
-            echo "Nothing to convert."
+            echo "Nothing to do."
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git commit -m "Convert PNG images to lossless WebP"
+          git commit -m "Process images: convert PNGs to WebP and rebuild resized copies"
           git pull --rebase origin "${GITHUB_REF_NAME}"
           git push origin "HEAD:${GITHUB_REF_NAME}"
